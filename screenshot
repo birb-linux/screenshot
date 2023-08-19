@@ -1,0 +1,47 @@
+#!/bin/sh
+
+# Come up with a random filename
+FILENAME="$(mktemp -u /tmp/XXXXXXXXXXXX.png)"
+
+# Take the screenshot accordingly
+case $1 in
+	--crop|-c)
+		scrot -s $FILENAME
+		;;
+
+	--full|-f)
+		scrot $FILENAME
+		;;
+
+	--help|-h)
+		echo "Usage: screenshot [option] [--keep|--shred]"
+		echo ""
+		echo "Options:"
+		echo "  -c  --crop      Take screeenshot of a selected area"
+		echo "  -f  --full      Take a fullscreen screenshot"
+		echo "  -h  --help      Print this help text"
+		echo ""
+		echo "The screenshot will be deleted after it has been taken unless"
+		echo "the -k|--keep option was set."
+		echo ""
+		echo "If --shred is set after an option, the screenshot will be shredded"
+		echo "with GNU shred after the dragon window has closed"
+		;;
+
+	*)
+		echo "No options were given. Quitting..."
+		exit 1
+		;;
+esac
+
+echo $FILENAME
+
+# Open the dragon menu
+dragon $FILENAME
+
+# Delete the file unless --keep was specified
+case $2 in
+	-k|--keep) ;;
+	-s|--shred) shred --remove=unlink $FILENAME ;;
+	*) rm $FILENAME ;;
+esac
