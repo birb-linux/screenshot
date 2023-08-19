@@ -26,6 +26,7 @@ case $1 in
 		echo ""
 		echo "If --shred is set after an option, the screenshot will be shredded"
 		echo "with GNU shred after the dragon window has closed"
+		exit 0
 		;;
 
 	*)
